@@ -142,3 +142,31 @@ module.exports.passwordOtp = async (req, res) => {
     message: "Xác thực thành công!"
   });
 };
+
+// [POST] /api/v1/users/password/reset
+module.exports.resetPassword = async (req, res) => {
+  try {
+    const token = req.body.token;
+    const password = req.body.password;
+
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
+    const userId = decoded.id;
+
+    await User.updateOne({
+      _id: userId
+    }, {
+      password: md5(password)
+    });
+
+    res.json({
+      code: 200,
+      message: "Đổi mật khẩu thành công!"
+    });
+
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Đổi mật khẩu không thành công"
+    })
+  }
+}

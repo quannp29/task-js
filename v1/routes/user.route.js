@@ -9,4 +9,6 @@ router.post("/login", controller.login);
 
 router.post("/password/forgot", controller.passwordForgot);
 
+router.post("/password/otp", controller.passwordOtp);
+
 module.exports = router;

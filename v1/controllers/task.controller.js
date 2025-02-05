@@ -2,7 +2,13 @@ const Task = require("../models/task.model");
 
 // [GET] /api/v1/tasks
 module.exports.index = async (req, res) => {
+  const userId = res.locals.user.id;
+  
   const find = {
+    $or: [
+      { createdBy: userId },
+      { listUser: userId }
+    ],
     deleted: false,
   };
 
@@ -44,7 +50,11 @@ module.exports.index = async (req, res) => {
     .limit(pagination.limit)
     .skip(skip);
 
-  res.json(tasks);
+  res.json({
+    code: 200,
+    message: "Thành công",
+    tasks: tasks
+  });
 };
 
 // [GET] /api/v1/tasks/detail/:id
